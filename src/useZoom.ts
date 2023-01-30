@@ -1,20 +1,32 @@
 import Konva from 'konva';
+import { useState } from 'react';
 
-let scales = [ 5, 4, 3, 2.5, 2, 1.5, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05 ]
+const scales = [ 5, 4, 3, 2.5, 2, 1.5, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05 ]
+const DEFAULT_SCALE_INDEX = 6;
+const DEFAULT_STAGE_POS = {
+    x: 0,
+    y: 0,
+};
 
 export const useZoom = () => {
-    let currentScale = 6;
+    const [ scaleIndex, setScaleIndex ] = useState(DEFAULT_SCALE_INDEX)
+    const [ stagePos, setStagePos ] = useState(DEFAULT_STAGE_POS)
 
     const handleZoom = (e: Konva.KonvaEventObject<WheelEvent>) => {
         e.evt.preventDefault();
 
-        const stage = e.target as Konva.Stage;
-        const oldScale = stage.scaleX();
-        const pointer = stage.getPointerPosition() ?? { x: 0, y: 0 };
+        const stage = e.target.getStage();
 
-        const mousePointTo = {
-            x: (pointer.x - stage.x()) / oldScale,
-            y: (pointer.y - stage.y()) / oldScale,
+        if (stage === null) {
+            return
+        }
+
+        const currentScale = stage.scaleX();
+        const pointerPosition = stage.getPointerPosition() ?? { x: 0, y: 0 };
+
+        const scaledPointerPosition = {
+            x: (pointerPosition.x - stage.x()) / currentScale,
+            y: (pointerPosition.y - stage.y()) / currentScale,
         };
 
         let direction = e.evt.deltaY > 0 ? 1 : -1;
@@ -23,25 +35,34 @@ export const useZoom = () => {
             direction = -direction;
         }
 
+        let newScaleIndex;
         if (direction > 0) {
-            currentScale = currentScale > 0 ? currentScale - 1 : currentScale;
+            newScaleIndex = scaleIndex > 0 ? scaleIndex - 1 : scaleIndex;
         } else {
-            currentScale = currentScale < scales.length - 1 ? currentScale + 1 : currentScale;
+            newScaleIndex = scaleIndex < scales.length - 1 ? scaleIndex + 1 : scaleIndex;
         }
+        setScaleIndex(newScaleIndex);
 
-        const newScale = scales[currentScale];
+        const newScaleValue = scales[newScaleIndex];
 
-        stage.scale({ x: newScale, y: newScale });
-
-        const newPos = {
-            x: pointer.x - mousePointTo.x * newScale,
-            y: pointer.y - mousePointTo.y * newScale,
-        };
-
-        stage.position(newPos);
+        setStagePos({
+            x: pointerPosition.x - scaledPointerPosition.x * newScaleValue,
+            y: pointerPosition.y - scaledPointerPosition.y * newScaleValue,
+        });
     };
+
+    const handleDrag = () => {
+        // Here we just update the state variable to trigger a re-render
+        setStagePos({
+            x: 0,
+            y: 0,
+        });
+    }
 
     return {
         handleZoom,
+        handleDrag,
+        scale: scales[scaleIndex],
+        stagePos: stagePos,
     }
 }
