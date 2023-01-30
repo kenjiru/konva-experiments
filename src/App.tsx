@@ -1,5 +1,6 @@
 import React from 'react';
 import { Circle, Layer, Rect, Stage } from 'react-konva';
+import { Grid } from './Grid';
 import { useZoom } from './useZoom';
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
                 <Rect width={50} height={50} fill="red" />
                 <Circle x={200} y={200} stroke="black" radius={50} />
             </Layer>
+            <Grid/>
         </Stage>
     );
 }
