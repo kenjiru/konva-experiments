@@ -1,11 +1,10 @@
-import { useAtom } from 'jotai';
 import { useCallback, useEffect } from 'react';
-import { EditorMode, editorModeAtom } from '../../model/editorMode';
+import { EditorMode, useEditorMode } from '../../model/useEditorMode';
 
 const ESC_KEY = 'Escape';
 
 export const useKeyboardHandler = () => {
-    const [ editorMode, setEditorMode ] = useAtom(editorModeAtom);
+    const { editorMode, setEditorMode } = useEditorMode();
 
     const handleKeyUp = useCallback((ev: KeyboardEvent): any => {
         if (ev.code === ESC_KEY && editorMode !== EditorMode.Pointer) {

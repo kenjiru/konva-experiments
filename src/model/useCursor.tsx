@@ -1,5 +1,5 @@
 import { atom, useAtomValue } from 'jotai';
-import { EditorMode, editorModeAtom } from './editorMode';
+import { EditorMode, editorModeAtom } from './useEditorMode';
 
 const cursorClassAtom = atom((get) => {
     const editorMode = get(editorModeAtom);

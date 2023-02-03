@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai';
-import { EditorMode, editorModeAtom } from './editorMode';
+import { EditorMode, editorModeAtom } from './useEditorMode';
 
 export const useDrawingActions = () => {
     const setEditorMode = useSetAtom(editorModeAtom);
