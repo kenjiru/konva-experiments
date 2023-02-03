@@ -6,9 +6,9 @@ const cursorClassAtom = atom((get) => {
 
     switch (editorMode) {
         case EditorMode.Pointer:
-            return 'cursor-pointer';
+            return 'cursorPointer';
         case EditorMode.Rectangle:
-            return 'cursor-crosshairs';
+            return 'cursorCrosshair';
     }
 });
 

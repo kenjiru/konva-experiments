@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import React from 'react';
 import { Circle, Layer, Rect, Stage } from 'react-konva';
 import { useCursor } from '../../model/useCursor';
+import styles from './DrawingBoard.module.css';
 import { Grid } from './grid/Grid';
 import { useZoom } from './useZoom';
 
@@ -11,7 +12,7 @@ export const DrawingBoard: FC = () => {
 
     return (
         <Stage
-            className={cursorClass}
+            className={styles[cursorClass as keyof typeof styles]}
             onWheel={handleZoom}
             onDragEnd={handleDrag}
             width={window.innerWidth}
