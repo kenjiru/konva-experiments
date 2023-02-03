@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import React from 'react';
 import { Circle, Layer, Rect, Stage } from 'react-konva';
+import { useCursor } from '../../model/useCursor';
 import { Grid } from './grid/Grid';
-import { useCursor } from './useCursor';
 import { useZoom } from './useZoom';
 
 export const DrawingBoard: FC = () => {
