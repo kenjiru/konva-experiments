@@ -13,6 +13,7 @@ export const useEditorMode = () => {
     const [ editorMode, setEditorMode ] = useAtom(editorModeAtom);
 
     return {
+        isDrawing: editorMode !== EditorMode.Pointer,
         editorMode,
         setEditorMode,
     };

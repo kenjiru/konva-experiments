@@ -1,22 +1,34 @@
 import type { FC } from 'react';
 import React from 'react';
-import { Circle, Layer, Rect, Stage } from 'react-konva';
+import { Layer, Stage } from 'react-konva';
 import { useCursor } from '../../model/useCursor';
 import { useDraggable } from '../../model/useDraggable';
+import { useEditorContent } from '../../model/useEditorContent';
 import styles from './DrawingBoard.module.css';
+import { DrawnFigure } from './DrawnFigure';
+import { FigureComp } from './FigureComp';
 import { Grid } from './grid/Grid';
+import { useMouseManager } from './useMouseManager';
 import { useZoom } from './useZoom';
 
 export const DrawingBoard: FC = () => {
     const { handleZoom, handleDrag, scale, stagePos } = useZoom();
     const { cursorClass } = useCursor();
     const { isDraggable } = useDraggable();
+    const { handleMouseDown, handleMouseUp, handleMouseMove } = useMouseManager();
+    const { figures } = useEditorContent();
+    const figureComponents = figures.map((figure) =>
+        <FigureComp key={figure.id} figure={figure} />,
+    )
 
     return (
         <Stage
             className={styles[cursorClass as keyof typeof styles]}
             onWheel={handleZoom}
             onDragEnd={handleDrag}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
             width={window.innerWidth}
             height={window.innerHeight}
             scaleX={scale}
@@ -26,8 +38,8 @@ export const DrawingBoard: FC = () => {
             draggable={isDraggable}
         >
             <Layer>
-                <Rect width={50} height={50} fill="red" />
-                <Circle x={200} y={200} stroke="black" radius={50} />
+                {figureComponents}
+                <DrawnFigure />
             </Layer>
             <Grid />
         </Stage>
