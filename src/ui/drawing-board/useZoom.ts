@@ -51,11 +51,17 @@ export const useZoom = () => {
         });
     };
 
-    const handleDrag = () => {
+    const handleDrag = (ev: Konva.KonvaEventObject<MouseEvent>) => {
+        const stage = ev.target.getStage();
+
+        if (!stage) {
+            return;
+        }
+
         // Here we just update the state variable to trigger a re-render
         setStagePos({
-            x: 0,
-            y: 0,
+            x: stage.x(),
+            y: stage.y(),
         });
     }
 
