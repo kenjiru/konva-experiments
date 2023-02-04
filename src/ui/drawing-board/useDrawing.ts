@@ -1,4 +1,5 @@
 import Konva from 'konva';
+import { nanoid } from 'nanoid';
 import { Point, useDrawingState } from '../../model/useDrawingState';
 import { Figure, FigureType, useEditorContent } from '../../model/useEditorContent';
 import { useEditorMode } from '../../model/useEditorMode';
@@ -18,7 +19,7 @@ export const createFigureFromPoints = (
     const height = Math.abs((endPoint.y) - startPoint.y);
 
     return {
-        id: 'foo',
+        id: nanoid(),
         type: FigureType.Rect,
         x,
         y,
