@@ -33,6 +33,11 @@ export const useDrawing = () => {
     const { startPoint, setStartPoint, setEndPoint, resetDrawingState } = useDrawingState();
     const { addFigure } = useEditorContent();
 
+    const normalizePoint = ({ x, y }: Point, stagePosition: Point, stageScale: number): Point => ({
+        x: (x - stagePosition.x) / stageScale,
+        y: (y - stagePosition.y) / stageScale,
+    })
+
     const handleMouseDown = (ev: Konva.KonvaEventObject<MouseEvent>) => {
         const stage = ev.target.getStage();
 
@@ -42,8 +47,8 @@ export const useDrawing = () => {
 
         const pointerPosition = stage.getPointerPosition() ?? undefined;
 
-        if (!startPoint) {
-            setStartPoint(pointerPosition);
+        if (!startPoint && pointerPosition) {
+            setStartPoint(normalizePoint(pointerPosition, stage.getPosition(), stage.scaleX()));
         }
     }
 
@@ -60,7 +65,7 @@ export const useDrawing = () => {
             return
         }
 
-        const newFigure: Figure = createFigureFromPoints(startPoint, pointerPosition);
+        const newFigure: Figure = createFigureFromPoints(startPoint, normalizePoint(pointerPosition, stage.getPosition(), stage.scaleX()));
         addFigure(newFigure);
         resetDrawingState();
     }
@@ -78,7 +83,7 @@ export const useDrawing = () => {
             return
         }
 
-        setEndPoint(pointerPosition);
+        setEndPoint(normalizePoint(pointerPosition, stage.getPosition(), stage.scaleX()));
     }
 
     return {
