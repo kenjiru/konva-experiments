@@ -9,5 +9,5 @@ interface Props {
 const DEFAULT_STROKE = 'red';
 
 export const FigureComp: FC<Props> = ({
-    figure: { x, y, width, height },
-}) => <Rect x={x} y={y} width={width} height={height} stroke={DEFAULT_STROKE} />
+    figure: { id, x, y, width, height },
+}) => <Rect id={id} x={x} y={y} width={width} height={height} stroke={DEFAULT_STROKE} />

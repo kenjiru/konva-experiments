@@ -15,7 +15,7 @@ export const DrawingBoard: FC = () => {
     const { handleZoom, handleDrag, scale, stagePos } = useZoom();
     const { cursorClass } = useCursor();
     const { isDraggable } = useDraggable();
-    const { handleMouseDown, handleMouseUp, handleMouseMove } = useMouseManager();
+    const { handleMouseDown, handleMouseUp, handleMouseMove, handleClick } = useMouseManager();
     const { figures } = useEditorContent();
     const figureComponents = figures.map((figure) =>
         <FigureComp key={figure.id} figure={figure} />,
@@ -29,6 +29,7 @@ export const DrawingBoard: FC = () => {
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
+            onClick={handleClick}
             width={window.innerWidth}
             height={window.innerHeight}
             scaleX={scale}

@@ -1,5 +1,6 @@
 import Konva from 'konva';
 import { nanoid } from 'nanoid';
+import { useCallback } from 'react';
 import { Point, useDrawingState } from '../../model/useDrawingState';
 import { Figure, FigureType, useEditorContent } from '../../model/useEditorContent';
 import { useEditorMode } from '../../model/useEditorMode';
@@ -36,9 +37,9 @@ export const useDrawing = () => {
     const normalizePoint = ({ x, y }: Point, stagePosition: Point, stageScale: number): Point => ({
         x: (x - stagePosition.x) / stageScale,
         y: (y - stagePosition.y) / stageScale,
-    })
+    });
 
-    const handleMouseDown = (ev: Konva.KonvaEventObject<MouseEvent>) => {
+    const handleMouseDown = useCallback((ev: Konva.KonvaEventObject<MouseEvent>) => {
         const stage = ev.target.getStage();
 
         if (stage === null || !isDrawing) {
@@ -50,9 +51,9 @@ export const useDrawing = () => {
         if (!startPoint && pointerPosition) {
             setStartPoint(normalizePoint(pointerPosition, stage.getPosition(), stage.scaleX()));
         }
-    }
+    }, [ startPoint, isDrawing, setStartPoint ]);
 
-    const handleMouseUp = (ev: Konva.KonvaEventObject<MouseEvent>) => {
+    const handleMouseUp = useCallback((ev: Konva.KonvaEventObject<MouseEvent>) => {
         const stage = ev.target.getStage();
 
         if (stage === null || !isDrawing || !startPoint) {
@@ -68,9 +69,9 @@ export const useDrawing = () => {
         const newFigure: Figure = createFigureFromPoints(startPoint, normalizePoint(pointerPosition, stage.getPosition(), stage.scaleX()));
         addFigure(newFigure);
         resetDrawingState();
-    }
+    }, [ startPoint, isDrawing, addFigure, resetDrawingState ]);
 
-    const handleMouseMove = (ev: Konva.KonvaEventObject<MouseEvent>) => {
+    const handleMouseMove = useCallback((ev: Konva.KonvaEventObject<MouseEvent>) => {
         const stage = ev.target.getStage();
 
         if (stage === null || !isDrawing) {
@@ -84,7 +85,7 @@ export const useDrawing = () => {
         }
 
         setEndPoint(normalizePoint(pointerPosition, stage.getPosition(), stage.scaleX()));
-    }
+    }, [ isDrawing, setEndPoint ]);
 
     return {
         handleMouseDown,
