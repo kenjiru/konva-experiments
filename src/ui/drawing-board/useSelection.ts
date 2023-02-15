@@ -13,6 +13,8 @@ export const useSelection = () => {
 
         if (isShape(figure)) {
             setSelectedFigureId(figure.id());
+        } else {
+            setSelectedFigureId(undefined);
         }
     }, [ setSelectedFigureId ]);
 
