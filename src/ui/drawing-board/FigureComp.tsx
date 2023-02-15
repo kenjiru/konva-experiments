@@ -1,20 +1,19 @@
 import type { FC } from 'react';
 import { Rect } from 'react-konva';
 import { Figure } from '../../model/useEditorContent';
-import { useEditorSelection } from '../../model/useEditorSelection';
 
 interface Props {
     figure: Figure;
+    isSelected: boolean;
 }
 
 const DEFAULT_STROKE = 'red';
+const SELECT_STROKE = 'blue';
 
 export const FigureComp: FC<Props> = ({
     figure: { id, x, y, width, height },
+    isSelected,
 }) => {
-    const { selectedFigureId } = useEditorSelection();
-    const isDraggable = (id: string) => id === selectedFigureId;
-
     return (
         <Rect
             id={id}
@@ -22,8 +21,8 @@ export const FigureComp: FC<Props> = ({
             y={y}
             width={width}
             height={height}
-            stroke={DEFAULT_STROKE}
-            draggable={isDraggable(id)}
+            stroke={isSelected ? SELECT_STROKE : DEFAULT_STROKE}
+            draggable={isSelected}
         />
     );
 }

@@ -4,6 +4,7 @@ import { Layer, Stage } from 'react-konva';
 import { useCursor } from '../../model/useCursor';
 import { useDraggable } from '../../model/useDraggable';
 import { useEditorContent } from '../../model/useEditorContent';
+import { useEditorSelection } from '../../model/useEditorSelection';
 import styles from './DrawingBoard.module.css';
 import { DrawnFigure } from './DrawnFigure';
 import { FigureComp } from './FigureComp';
@@ -17,8 +18,13 @@ export const DrawingBoard: FC = () => {
     const { isDraggable } = useDraggable();
     const { handleMouseDown, handleMouseUp, handleMouseMove, handleClick } = useMouseManager();
     const { figures } = useEditorContent();
+    const { selectedFigureId } = useEditorSelection();
     const figureComponents = figures.map((figure) =>
-        <FigureComp key={figure.id} figure={figure} />,
+        <FigureComp
+            key={figure.id}
+            figure={figure}
+            isSelected={figure.id === selectedFigureId}
+        />,
     )
 
     return (
