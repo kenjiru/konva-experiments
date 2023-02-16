@@ -36,9 +36,28 @@ export const useEditorContent = () => {
         ensureMinimumDimensions(newFigure),
     ]);
 
+    const updateFigure = (idToUpdate: string, newFigureProps: Partial<Omit<Figure, 'id'>>) => {
+        const foundItem = figures.find(({ id }) => id === idToUpdate);
+
+        if (!foundItem) {
+            console.error(`Could not find figure with id ${idToUpdate}`);
+            return;
+        }
+
+
+        setFigures([
+            ...figures.filter(({ id }) => id !== idToUpdate),
+            {
+                ...foundItem,
+                ...newFigureProps,
+            },
+        ]);
+    }
+
     return {
         figures,
         setFigures,
         addFigure,
+        updateFigure,
     }
 }
